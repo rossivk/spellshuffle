@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Flashcard Mix</title>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="flashcard-wrapper">
+    <header class="flashcard-header">
+      <a href="https://kidsgocreative.com" class="logo-link">
+        <img src="https://kidsgocreative.com/wp-content/uploads/2026/03/rvk gold gradient.webp" alt="My Site Logo" class="flashcard-logo">
+      </a>
+      <h2>Word Mix</h2>
+      <button id="toggleDarkMode" class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
+    </header>
+
+    <div class="flashcard-main-container">
+      <div id="inputArea" class="flashcard-input" aria-hidden="false">
+        <textarea id="wordInput" rows="6" placeholder="Enter words separated by commas OR one per line"></textarea>
+        <div class="controls">
+          <button id="startBtn" type="button" class="button word-button orange-btn">Start Shuffle</button>
+          <button id="clearBtn" type="button" class="button grey-gradient">Clear</button>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button id="toggleSettingsBtn" class="button grey-gradient" style="width:82.5vw; height:36px; font-size:0.88rem;">⚙️ Parent Settings ▼</button>
+          <div id="parentSettings" style="display:none; margin-top:8px;" class="timer-settings">
+            <div style="display:inline-flex; align-items:center; gap:10px; background:#f5f5f0; border:1px solid #ddd; border-radius:2px; padding:6px 12px;">
+              <label style="cursor:pointer; white-space:nowrap; margin:0;">
+                <input type="checkbox" id="toggleTimer"> Auto-hide in
+                <input id="timerSeconds" type="number" min="1" value="10" style="width:30px; border:1px solid #ccc; border-radius:2px; padding:2px 4px;">&nbsp;secs.
+              </label>
+            </div>
+            <div style="margin-top:8px;">
+              <label style="cursor:pointer;">
+                <input type="checkbox" id="autoSpeak"> Auto-speak each word
+              </label>
+            </div>
+            <div style="margin-top:6px;">
+              <label style="cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                <input type="checkbox" id="spellingMode" checked>
+                <span class="abc-label">abc</span> Spelling test mode
+              </label>
+            </div>
+
+            <div style="margin-top:8px;">
+              <span style="font-weight:600; font-size:0.88rem;">Accent:</span>
+              <div style="display:flex; gap:8px; justify-content:center; margin-top:6px;">
+                <button id="accentUK" class="accent-btn accent-active" type="button">🇬🇧 UK</button>
+                <button id="accentUS" class="accent-btn" type="button">🇺🇸 US</button>
+              </div>
+            </div>
+            <div style="font-size:0.8rem; color:#888; margin-top:8px;">Set before you press Start</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="flashcardArea" class="flashcard-play" style="display:none;"></div>
+
+      <div id="archiveSection" class="flashcard-archive" style="margin-top:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3 style="margin:0;">Saved Words</h3>
+          <button id="toggleArchiveBtn" class="button grey-gradient" style="width:auto; padding:0 14px; font-size:0.85rem; height:34px;">Show ▼</button>
+        </div>
+        <div id="archiveContent" style="display:none; margin-top:10px;">
+          <textarea id="archiveList" readonly style="width:100%; box-sizing:border-box; resize:none; height:70px; padding:8px 10px; font-size:0.88rem; line-height:1.6; border:1px solid var(--mid-grey); border-radius:2px; background:var(--off-white); color:var(--text-dark); font-family:'Josefin Sans',sans-serif;"></textarea>
+          <button id="clearArchiveBtn" class="button grey-gradient" style="margin-top:10px;">Clear Saved Words</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div id="flashcardModal" class="flashcard-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="flashcard-modal-content">
+      <button id="closeModal" class="close-modal" aria-label="Close">×</button>
+
+      <!-- Word display -->
+      <div id="modalWord" class="modal-word" aria-live="polite">Word</div>
+
+      <!-- Spelling input -->
+      <div id="spellingInputArea" style="display:none;" class="spelling-input-area">
+        <!-- Colour key -->
+        <div class="colour-key">
+          <span><span class="key-dot vowel"></span> Vowel</span>
+          <span><span class="key-dot consonant"></span> Consonant</span>
+        </div>
+        <div id="letterBoxes" class="letter-boxes"></div>
+        <input type="text" id="spellingInput" class="spelling-text-input"
+               autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
+               placeholder="Type the word…" maxlength="40" />
+        <div id="spellingFeedback" class="spelling-feedback"></div>
+      </div>
+
+      <div style="margin-bottom:10px; display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap;">
+        <button id="speakBtn" class="button word-button speak-btn" aria-label="Speak word">🔊 Speak</button>
+        <button id="helpBtn" class="button word-button help-btn hidden">💡 Help</button>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <button id="nextWordBtn" class="button word-button orange-btn">Next Word</button>
+      </div>
+
+      <div id="progress" style="font-weight:600; margin-bottom:6px;">0 / 0</div>
+      <div id="counter" style="font-size:0.95rem;">Done: 0 | Left: 0</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,436 @@
+/* ===== CSS Variables ===== */
+:root {
+  --gold:        #C9A84C;
+  --gold-light:  #E8C96A;
+  --gold-dark:   #9A7A2E;
+  --black:       #1a1a1a;
+  --off-white:   #f5f5f0;
+  --mid-grey:    #e8e8e2;
+  --text-dark:   #1a1a1a;
+  --text-light:  #f5f5f0;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&display=swap');
+
+body {
+  font-family: 'Josefin Sans', sans-serif;
+  margin: 0; padding: 0;
+  background: var(--off-white);
+  color: var(--text-dark);
+}
+
+button, input, textarea, select { font-family: 'Josefin Sans', sans-serif; }
+
+h2 { margin: 8px 0; font-size: 1.4rem; color: var(--gold-light); letter-spacing: 0.03em; }
+h3 { margin: 0 0 6px 0; font-size: 1rem; }
+
+.flashcard-wrapper {
+  margin: 16px auto;
+  text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.flashcard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  background: var(--black);
+  padding: 8px 14px;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.flashcard-logo { max-height: 24px; width: auto; }
+
+.dark-toggle {
+  width: 28px; height: 28px;
+  border-radius: 10px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold-light);
+  font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.dark-toggle:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(201,168,76,0.4); }
+
+#wordInput {
+  width: 90%; max-width: 400px;
+  min-height: 100px;
+  padding: 10px; font-size: 0.95rem;
+  border: 1.5px solid var(--gold);
+  border-radius: 2px; margin-bottom: 12px;
+  resize: vertical;
+  background-color: #fff; color: var(--text-dark);
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  box-shadow: 0 2px 8px rgba(201,168,76,0.15);
+}
+#wordInput:focus { outline: none; border-color: var(--gold-dark); box-shadow: 0 2px 10px rgba(201,168,76,0.3); }
+
+.word-button {
+  width: 40vw; max-width: 180px; height: 38px;
+  font-size: 0.88rem; font-weight: bold;
+  background: var(--black);
+  border: none; border-radius: 2px; color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+.word-button:hover { transform: scale(1.03); box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+
+.orange-btn {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+  color: var(--black); font-weight: 700;
+}
+.orange-btn:hover { box-shadow: 0 4px 12px rgba(201,168,76,0.4); }
+
+.speak-btn {
+  background: var(--black); color: var(--gold-light);
+  border: 1.5px solid var(--gold);
+}
+.speak-btn:hover { background: #2a2a2a; box-shadow: 0 4px 12px rgba(201,168,76,0.3); }
+
+.button.grey-gradient {
+  background: var(--mid-grey); color: var(--text-dark);
+  border: 1.5px solid #ccc; border-radius: 2px;
+  font-size: 0.88rem; font-weight: bold;
+  height: 38px; width: 40vw; max-width: 180px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+.button.grey-gradient:hover { transform: scale(1.03); box-shadow: 0 4px 12px rgba(0,0,0,0.15); background: #dcdcd6; }
+
+.accent-btn {
+  flex: 1; max-width: 100px; height: 34px;
+  font-size: 0.85rem; font-weight: 600;
+  font-family: 'Josefin Sans', sans-serif;
+  border: 1.5px solid var(--gold); border-radius: 2px;
+  background: #fff; color: var(--text-dark);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.accent-btn.accent-active { background: var(--gold); color: var(--black); border-color: var(--gold-dark); font-weight: 700; }
+.accent-btn:hover { transform: scale(1.05); }
+
+.controls, .controls-outer { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+
+.timer-settings {
+  margin-top: 10px; font-size: 0.9rem;
+  background: #fff; border: 1px solid var(--mid-grey);
+  border-radius: 2px; padding: 10px 14px;
+}
+
+.flashcard-archive {
+  background: #fff; padding: 12px;
+  border: 1.5px solid var(--gold); border-radius: 2px;
+  margin-top: 14px; text-align: center;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  box-shadow: 0 2px 8px rgba(201,168,76,0.12);
+}
+
+#archiveList {
+  padding: 8px 12px; margin: 8px 4px;
+  background: var(--off-white); border: 1px solid var(--mid-grey);
+  border-radius: 2px; max-height: 70px; overflow-y: auto;
+  text-align: left; line-height: 1.6; font-size: 0.88rem;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* ===== Modal ===== */
+.flashcard-modal {
+  display: none; position: fixed;
+  z-index: 9999; left: 0; top: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.97);
+  justify-content: center; align-items: center;
+  overflow-y: auto;
+}
+
+.flashcard-modal-content {
+  background: #fff; padding: 20px 20px 24px;
+  border-radius: 2px; text-align: center;
+  position: relative; max-width: 480px; width: 90%;
+  animation: fadeInScale 0.3s ease;
+  border-top: 4px solid var(--gold);
+  transition: background-color 0.3s, color 0.3s;
+  margin: auto;
+}
+
+.close-modal {
+  position: absolute; top: 8px; right: 14px;
+  font-size: 1.6rem; cursor: pointer; color: #888; line-height: 1;
+}
+.close-modal:hover { color: var(--gold-dark); }
+
+.modal-word {
+  font-size: 2.8rem; font-weight: 700;
+  margin: 12px 0; color: var(--black);
+  letter-spacing: 0.03em;
+  transition: color 0.3s;
+}
+
+/* ===== Spelling Input ===== */
+.spelling-input-area { margin: 6px 0 12px; }
+
+.letter-boxes {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  justify-content: center;
+  margin-bottom: 10px; min-height: 48px;
+}
+
+/* letter-box defined below */
+
+
+
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+
+.spelling-text-input {
+  width: 90%; max-width: 300px; height: 42px;
+  font-size: 1.1rem; font-weight: 600;
+  font-family: 'Josefin Sans', sans-serif;
+  text-align: center;
+  border: 2px solid var(--gold); border-radius: 4px;
+  padding: 0 12px; color: var(--text-dark); background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.05em;
+}
+.spelling-text-input:focus { outline: none; border-color: var(--gold-dark); box-shadow: 0 2px 10px rgba(201,168,76,0.3); }
+
+.spelling-feedback {
+  margin-top: 8px; font-size: 1rem; font-weight: 700;
+  min-height: 24px; transition: color 0.2s;
+}
+.spelling-feedback.correct { color: #2e7d32; }
+.spelling-feedback.wrong   { color: #c62828; }
+
+/* ===== Dark Mode ===== */
+body.dark-mode { background: #111; color: var(--text-light); }
+body.dark-mode h2 { color: var(--gold-light); }
+body.dark-mode .flashcard-wrapper { background-color: #1a1a1a; }
+body.dark-mode .flashcard-header  { background-color: #000; }
+body.dark-mode #wordInput { background-color: #222; color: var(--text-light); border-color: var(--gold-dark); }
+body.dark-mode .timer-settings { background: #222; border-color: #333; color: var(--text-light); }
+body.dark-mode .flashcard-archive { background-color: #222; border-color: var(--gold-dark); color: var(--text-light); }
+body.dark-mode textarea#archiveList { background-color: #1a1a1a; border-color: #333; color: var(--text-light); }
+body.dark-mode .flashcard-modal-content { background-color: #1e1e1e; color: var(--text-light); border-top-color: var(--gold); }
+body.dark-mode .modal-word { color: var(--gold-light); }
+body.dark-mode .close-modal { color: #aaa; }
+body.dark-mode .button.grey-gradient { background: #2a2a2a; color: var(--text-light); border-color: #444; }
+body.dark-mode .button.grey-gradient:hover { background: #333; }
+body.dark-mode .word-button { background: #2a2a2a; }
+body.dark-mode .orange-btn { background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light)); color: var(--black); }
+body.dark-mode .speak-btn { background: #111; color: var(--gold-light); border-color: var(--gold-dark); }
+body.dark-mode .accent-btn { background: #2a2a2a; color: var(--text-light); border-color: var(--gold-dark); }
+body.dark-mode .accent-btn.accent-active { background: var(--gold-dark); color: #fff; border-color: var(--gold); }
+body.dark-mode .word-button:hover { box-shadow: 0 5px 15px rgba(201,168,76,0.2); }
+body.dark-mode .context-sentence { background: #2a2200; color: var(--text-light); border-color: var(--gold-dark); }
+body.dark-mode .letter-box { background: #2a2a2a; border-color: #444; color: var(--text-light); }
+body.dark-mode 
+body.dark-mode .letter-box.wrong   { background: #3a1b1b; border-color: #e53935; color: #ef9a9a; }
+body.dark-mode .spelling-text-input { background: #222; color: var(--text-light); border-color: var(--gold-dark); }
+
+/* ===== Animation ===== */
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.flashcard-modal, .flashcard-modal * { touch-action: manipulation; }
+html, body { touch-action: manipulation; }
+
+/* ===== Responsive ===== */
+@media (min-width: 768px) {
+  .flashcard-wrapper { width: 50vw; max-width: 700px; }
+  .word-button, .button.grey-gradient { width: 160px; max-width: 160px; }
+}
+
+@media (max-width: 767px) {
+  .flashcard-wrapper { width: 90vw; margin: 10px auto; }
+}
+
+/* ===== Colour-coded letter boxes ===== */
+/* Base box — neutral before typing */
+.letter-box {
+  width: 34px; height: 42px;
+  border: 2.5px solid var(--mid-grey); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; font-weight: 700;
+  color: transparent;           /* hide colour hint text */
+  background: #fff;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s;
+  position: relative;
+}
+
+/* Vowel boxes — warm red tint */
+.letter-box.vowel-box {
+  background: #fffbe9;
+  border-color: var(--gold);
+}
+.letter-box.vowel-box::after {
+  content: "";
+  position: absolute;
+  bottom: 4px; left: 50%; transform: translateX(-50%);
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.7;
+}
+
+/* Consonant boxes — cool blue tint */
+.letter-box.consonant-box {
+  background: #f0f0ec;
+  border-color: #888;
+}
+.letter-box.consonant-box::after {
+  content: "";
+  position: absolute;
+  bottom: 4px; left: 50%; transform: translateX(-50%);
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #888;
+  opacity: 0.5;
+}
+
+/* Revealed scaffold letters (from Help) */
+.letter-box.revealed {
+  color: #555;
+  font-weight: 700;
+}
+.letter-box.vowel-box.revealed { border-color: var(--gold-dark); background: #fffbe9; color: var(--gold-dark); }
+.letter-box.consonant-box.revealed { border-color: #444; background: #e8e8e2; color: #222; }
+
+/* Typed correct */
+.letter-box.typed-correct {
+  color: #2e7d32;
+  border-color: #4caf50; background: #e8f5e9;
+  transform: scale(1.06);
+}
+/* Typed wrong */
+.letter-box.typed-wrong {
+  color: #c62828;
+  border-color: #e53935; background: #ffebee;
+  animation: shake 0.3s ease;
+}
+
+/* ===== Help button ===== */
+.help-btn {
+  background: #fff8e1;
+  color: #f57f17;
+  border: 1.5px solid #ffca28;
+  font-weight: 700;
+}
+.help-btn:hover {
+  background: #fff3cd;
+  box-shadow: 0 4px 12px rgba(255,193,7,0.35);
+}
+.help-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===== Colour key legend ===== */
+.colour-key {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  font-size: 0.78rem;
+  color: #888;
+  margin-bottom: 6px;
+}
+.colour-key span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.key-dot {
+  width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+}
+.key-dot.vowel    { background: var(--gold); }
+.key-dot.consonant{ background: #888; }
+
+/* Dark mode adjustments */
+body.dark-mode .letter-box.vowel-box     { background: #2a2000; border-color: var(--gold); }
+body.dark-mode .letter-box.consonant-box { background: #222; border-color: #666; }
+body.dark-mode .letter-box.vowel-box.revealed   { background: #2a2000; color: var(--gold-light); border-color: var(--gold-dark); }
+body.dark-mode .letter-box.consonant-box.revealed{ background: #2a2a2a; color: #ddd; border-color: #666; }
+body.dark-mode .letter-box.typed-correct { background: #1b3a1b; color: #81c784; border-color: #4caf50; }
+body.dark-mode .letter-box.typed-wrong   { background: #3a1b1b; color: #ef9a9a; border-color: #e53935; }
+body.dark-mode .help-btn { background: #2a2000; color: #ffca28; border-color: #f57f17; }
+body.dark-mode .help-btn:hover { background: #332800; }
+
+
+/* ===== Gold ABC badge & label ===== */
+.abc-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+  color: var(--black);
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 6px 18px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(201,168,76,0.4);
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+/* Small gold abc label next to checkbox */
+.abc-label {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+  color: var(--black);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-family: 'Josefin Sans', sans-serif;
+  vertical-align: middle;
+}
+
+/* ===== Gold checkbox ===== */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--gold);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+  transition: background 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+
+input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+  border-color: var(--gold-dark);
+}
+
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 11px;
+  border: 2.5px solid var(--black);
+  border-top: none;
+  border-left: none;
+  transform: translate(-50%, -60%) rotate(45deg);
+}
+
+body.dark-mode input[type="checkbox"] {
+  background: #222;
+  border-color: var(--gold-dark);
+}
+
+body.dark-mode input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+  border-color: var(--gold);
+}
+
+/* ===== Hidden utility ===== */
+.hidden { display: none !important; }
