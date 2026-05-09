@@ -1,11 +1,11 @@
 const CACHE_NAME = "flashcard-cache-v1";
 const urlsToCache = [
-  "/flashcards/index.html",
-  "/flashcards/style.css",
-  "/flashcards/script.js",
-  "/flashcards/manifest.json",
-  "/flashcards/icon-192.png",
-  "/flashcards/icon-512.png"
+  "/spellshuffle/index.html",
+  "/spellshuffle/style.css",
+  "/spellshuffle/script.js",
+  "/spellshuffle/manifest.json",
+  "/spellshuffle/icon-192.png",
+  "/spellshuffle/icon-512.png"
 ];
 
 self.addEventListener("install", event => {
