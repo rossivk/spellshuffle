@@ -3,32 +3,61 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Flashcard Mix</title>
+  <title>Spell Shuffle</title>
   <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="theme-color" content="#C9A84C">
+  <script>
+    // Apply dark mode before page renders to avoid flash
+    if (localStorage.getItem("darkMode") === "true") {
+      document.documentElement.classList.add("dark-mode");
+      document.addEventListener("DOMContentLoaded", function() {
+        document.body.classList.add("dark-mode");
+      });
+    }
+  </script>
 </head>
 <body>
   <div class="flashcard-wrapper">
     <header class="flashcard-header">
-      <a href="#" class="logo-link">
+      <a href="https://kidsgocreative.com" class="logo-link">
         <img src="https://raw.githubusercontent.com/rossivk/flashcards/main/rvk%20gold%20gradient.webp" alt="My Site Logo" class="flashcard-logo">
       </a>
-      <h2>Flash Shuffle</h2>
+      <h2>Spell Shuffle</h2>
       <button id="toggleDarkMode" class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
     </header>
 
     <div class="flashcard-main-container">
       <div id="inputArea" class="flashcard-input" aria-hidden="false">
-        <textarea id="wordInput" rows="6" placeholder="Enter words separated by commas OR one per line"></textarea>
+        <textarea id="wordInput" rows="6" style="box-sizing:border-box;" placeholder="Enter words separated by commas OR one per line"></textarea>
+        <!-- Saved Lists -->
+        <div class="list-manager">
+          <div class="list-manager-row">
+            <select id="savedListsDropdown" class="lists-dropdown">
+              <option value="">— Load a saved list —</option>
+            </select>
+            <button id="editListBtn" type="button" class="button list-btn list-edit-btn" title="Edit selected list">✏️</button>
+            <button id="deleteListBtn" type="button" class="button list-btn list-delete-btn" title="Delete selected list">🗑</button>
+          </div>
+          <div class="list-manager-row">
+            <input type="text" id="listNameInput" class="list-name-input" placeholder="List name e.g. Week 1 Words" maxlength="40">
+            <button id="saveListBtn" type="button" class="button list-btn list-save-btn">💾 Save</button>
+          </div>
+        </div>
+
         <div class="controls">
           <button id="startBtn" type="button" class="button word-button orange-btn">Start Shuffle</button>
           <button id="clearBtn" type="button" class="button grey-gradient">Clear</button>
         </div>
 
         <div style="margin-top:10px;">
-          <button id="toggleSettingsBtn" class="button grey-gradient" style="width:82.5vw; height:36px; font-size:0.88rem;">⚙️ Parent Settings ▼</button>
+          <button id="toggleSettingsBtn" class="button grey-gradient" style="width:90%; max-width:400px; height:36px; font-size:0.88rem;">⚙️ Settings ▼</button>
           <div id="parentSettings" style="display:none; margin-top:8px;" class="timer-settings">
-            <div style="display:inline-flex; align-items:center; gap:10px; background:#f5f5f0; border:1px solid #ddd; border-radius:2px; padding:6px 12px;">
+            <div style="display:inline-flex; align-items:center; gap:10px; padding:6px 0;">
               <label style="cursor:pointer; white-space:nowrap; margin:0;">
                 <input type="checkbox" id="toggleTimer"> Auto-hide in
                 <input id="timerSeconds" type="number" min="1" value="10" style="width:30px; border:1px solid #ccc; border-radius:2px; padding:2px 4px;">&nbsp;secs.
@@ -60,16 +89,6 @@
 
       <div id="flashcardArea" class="flashcard-play" style="display:none;"></div>
 
-      <div id="archiveSection" class="flashcard-archive" style="margin-top:20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h3 style="margin:0;">Saved Words</h3>
-          <button id="toggleArchiveBtn" class="button grey-gradient" style="width:auto; padding:0 14px; font-size:0.85rem; height:34px;">Show ▼</button>
-        </div>
-        <div id="archiveContent" style="display:none; margin-top:10px;">
-          <textarea id="archiveList" readonly style="width:100%; box-sizing:border-box; resize:none; height:70px; padding:8px 10px; font-size:0.88rem; line-height:1.6; border:1px solid var(--mid-grey); border-radius:2px; background:var(--off-white); color:var(--text-dark); font-family:'Josefin Sans',sans-serif;"></textarea>
-          <button id="clearArchiveBtn" class="button grey-gradient" style="margin-top:10px;">Clear Saved Words</button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -91,7 +110,8 @@
         <div id="letterBoxes" class="letter-boxes"></div>
         <input type="text" id="spellingInput" class="spelling-text-input"
                autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
-               placeholder="Type the word…" maxlength="40" />
+               inputmode="text"
+               placeholder="Tap here then type…" maxlength="40" />
         <div id="spellingFeedback" class="spelling-feedback"></div>
       </div>
 

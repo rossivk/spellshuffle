@@ -1,3 +1,8 @@
+// ===== Restore dark mode immediately =====
+if (localStorage.getItem("darkMode") === "true") {
+  document.body.classList.add("dark-mode");
+}
+
 // script.js
 
 let words = [];
@@ -10,7 +15,6 @@ let spellingCorrect = false;
 const wordInput         = document.getElementById("wordInput");
 const inputArea         = document.getElementById("inputArea");
 const flashcardArea     = document.getElementById("flashcardArea");
-const archiveContainer  = document.getElementById("archiveList");
 const flashcardModal    = document.getElementById("flashcardModal");
 const modalWord         = document.getElementById("modalWord");
 const nextWordBtn       = document.getElementById("nextWordBtn");
@@ -523,30 +527,34 @@ document.getElementById("startBtn").addEventListener("click", () => {
 nextWordBtn.addEventListener("click", () => { currentIndex++; showWord(); });
 closeModalBtn.addEventListener("click", closeModalToInput);
 document.getElementById("clearBtn").addEventListener("click", () => { wordInput.value = ""; });
-document.getElementById("clearArchiveBtn").addEventListener("click", () => {
-  localStorage.removeItem("flashcardArchive");
-  renderArchive();
-});
 
-const toggleArchiveBtn = document.getElementById("toggleArchiveBtn");
-const archiveContent   = document.getElementById("archiveContent");
-toggleArchiveBtn.addEventListener("click", () => {
-  const isHidden = archiveContent.style.display === "none";
-  archiveContent.style.display = isHidden ? "block" : "none";
-  toggleArchiveBtn.textContent = isHidden ? "Hide ▲" : "Show ▼";
-});
 
 const darkToggle = document.getElementById("toggleDarkMode");
 if (darkToggle) {
+  // Apply saved dark mode on load
+  if (localStorage.getItem("darkMode") === "true") {
+    document.body.classList.add("dark-mode");
+    darkToggle.textContent = "☀️";
+  }
   darkToggle.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
-    darkToggle.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+    const isDark = document.body.classList.contains("dark-mode");
+    darkToggle.textContent = isDark ? "☀️" : "🌙";
+    localStorage.setItem("darkMode", isDark);
   });
 }
 
 // Help button
 const helpBtnEl = document.getElementById("helpBtn");
 if (helpBtnEl) helpBtnEl.addEventListener("click", applyHelp);
+
+// Tap letter boxes to bring keyboard back on touch screens
+letterBoxes.addEventListener("click", () => {
+  if (spellingInput && !spellingInput.disabled) {
+    spellingInput.focus();
+    spellingInput.click();
+  }
+});
 
 // Spelling input
 spellingInput.addEventListener("input", () => {
@@ -585,7 +593,9 @@ function showWord() {
       const helpBtn = document.getElementById("helpBtn");
       if (helpBtn) helpBtn.classList.remove("hidden");
       buildLetterBoxes(word, new Set());
-      setTimeout(() => spellingInput.focus(), 100);
+      // Focus input — on touch screens user must tap the input directly
+      spellingInput.removeAttribute("readonly");
+      setTimeout(() => { spellingInput.focus(); }, 50);
       speakWord(word);
     } else {
       modalWord.textContent = word;
@@ -599,7 +609,6 @@ function showWord() {
     const left  = Math.max(0, total - done);
     progressEl.textContent = `${done} / ${total}`;
     counterEl.textContent  = `\u2705 Done: ${done} | \u23F3 Left: ${left}`;
-    saveToArchive(word);
 
     if (toggleTimerCB && toggleTimerCB.checked && !isSpellingMode) {
       let secs = 10;
@@ -620,25 +629,6 @@ function showWord() {
   }
 }
 
-// ===== Archive =====
-function saveToArchive(word) {
-  try {
-    const key = "flashcardArchive";
-    let archive = JSON.parse(localStorage.getItem(key)) || [];
-    if (!archive.includes(word)) {
-      archive.push(word);
-      localStorage.setItem(key, JSON.stringify(archive));
-      renderArchive();
-    }
-  } catch (e) {}
-}
-
-function renderArchive() {
-  let archive = JSON.parse(localStorage.getItem("flashcardArchive")) || [];
-  archiveContainer.value = archive.length === 0 ? "No saved words yet." : archive.join(", ");
-}
-
-document.addEventListener("DOMContentLoaded", renderArchive);
 
 // Toggle parent settings
 const toggleSettingsBtn = document.getElementById("toggleSettingsBtn");
@@ -647,6 +637,104 @@ if (toggleSettingsBtn) {
   toggleSettingsBtn.addEventListener("click", () => {
     const isHidden = parentSettings.style.display === "none";
     parentSettings.style.display = isHidden ? "block" : "none";
-    toggleSettingsBtn.textContent = isHidden ? "\u2699\uFE0F Parent Settings \u25B2" : "\u2699\uFE0F Parent Settings \u25BC";
+    toggleSettingsBtn.textContent = isHidden ? "\u2699\uFE0F Settings \u25B2" : "\u2699\uFE0F Settings \u25BC";
+  });
+}
+
+// ===== Saved Lists =====
+const LISTS_KEY = "flashcard_saved_lists";
+
+function loadSavedLists() {
+  try { return JSON.parse(localStorage.getItem(LISTS_KEY)) || {}; } catch(e) { return {}; }
+}
+
+function saveLists(lists) {
+  try { localStorage.setItem(LISTS_KEY, JSON.stringify(lists)); } catch(e) {}
+}
+
+function renderDropdown() {
+  const dropdown = document.getElementById("savedListsDropdown");
+  if (!dropdown) return;
+  const lists = loadSavedLists();
+  const names = Object.keys(lists).sort();
+  dropdown.innerHTML = '<option value="">— Load a saved list —</option>';
+  names.forEach(name => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    dropdown.appendChild(opt);
+  });
+}
+
+// Save current words
+const saveListBtn = document.getElementById("saveListBtn");
+if (saveListBtn) {
+  saveListBtn.addEventListener("click", () => {
+    const name = document.getElementById("listNameInput").value.trim();
+    const words = wordInput.value.trim();
+    if (!name) { alert("Please enter a name for this list."); return; }
+    if (!words) { alert("Please enter some words to save."); return; }
+    const lists = loadSavedLists();
+    lists[name] = words;
+    saveLists(lists);
+    renderDropdown();
+    document.getElementById("listNameInput").value = "";
+    document.getElementById("savedListsDropdown").value = name;
+    // Visual confirmation
+    saveListBtn.textContent = "✅ Saved!";
+    setTimeout(() => { saveListBtn.textContent = "💾 Save"; }, 1500);
+  });
+}
+
+// Load selected list into textarea
+const savedListsDropdown = document.getElementById("savedListsDropdown");
+if (savedListsDropdown) {
+  savedListsDropdown.addEventListener("change", () => {
+    const name = savedListsDropdown.value;
+    if (!name) return;
+    const lists = loadSavedLists();
+    if (lists[name]) wordInput.value = lists[name];
+  });
+}
+
+// Delete selected list
+const deleteListBtn = document.getElementById("deleteListBtn");
+if (deleteListBtn) {
+  deleteListBtn.addEventListener("click", () => {
+    const name = savedListsDropdown.value;
+    if (!name) { alert("Please select a list to delete."); return; }
+    if (!confirm(`Delete "${name}"?`)) return;
+    const lists = loadSavedLists();
+    delete lists[name];
+    saveLists(lists);
+    wordInput.value = "";
+    renderDropdown();
+  });
+}
+
+// Edit selected list — loads words AND name ready to overwrite
+const editListBtn = document.getElementById("editListBtn");
+if (editListBtn) {
+  editListBtn.addEventListener("click", () => {
+    const name = savedListsDropdown.value;
+    if (!name) { alert("Please select a list to edit."); return; }
+    const lists = loadSavedLists();
+    if (lists[name]) {
+      wordInput.value = lists[name];
+      document.getElementById("listNameInput").value = name;
+      wordInput.focus();
+    }
+  });
+}
+
+// Init dropdown on load
+document.addEventListener("DOMContentLoaded", renderDropdown);
+
+// ===== Service Worker Registration =====
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/flashcards/sw.js")
+      .then(reg => console.log("SW registered:", reg.scope))
+      .catch(err => console.warn("SW failed:", err));
   });
 }
