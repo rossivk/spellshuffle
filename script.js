@@ -733,7 +733,7 @@ document.addEventListener("DOMContentLoaded", renderDropdown);
 // ===== Service Worker Registration =====
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/flashcards/sw.js")
+    navigator.serviceWorker.register("./sw.js")
       .then(reg => console.log("SW registered:", reg.scope))
       .catch(err => console.warn("SW failed:", err));
   });
