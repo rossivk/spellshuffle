@@ -1,7 +1,7 @@
 {
   "name": "Spell Shuffle",
   "short_name": "Spell Shuffle",
-  "start_url": "/flashcards/index.html",
+  "start_url": "/spellshuffle/index.html",
   "display": "standalone",
   "background_color": "#fffbe9",
   "theme_color": "#FFB703",
