@@ -44,6 +44,7 @@
             <button id="deleteListBtn" type="button" class="button list-btn list-delete-btn" title="Delete selected list">🗑</button>
           </div>
           <div class="list-manager-row">
+            
             <input type="text" id="listNameInput" class="list-name-input" placeholder="List name e.g. Week 1 Words" maxlength="40">
             <button id="saveListBtn" type="button" class="button list-btn list-save-btn">💾 Save</button>
           </div>
@@ -108,10 +109,11 @@
           <span><span class="key-dot consonant"></span> Consonant</span>
         </div>
         <div id="letterBoxes" class="letter-boxes"></div>
-        <input type="text" id="spellingInput" class="spelling-text-input"
-               autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
-               inputmode="text"
-               placeholder="Tap here then type…" maxlength="40" />
+       <input type="text" id="spellingInput" class="spelling-text-input"
+       autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
+       inputmode="search"
+       enterkeyhint="done"
+       placeholder="Tap here then type…" maxlength="40" />
         <div id="spellingFeedback" class="spelling-feedback"></div>
       </div>
 
